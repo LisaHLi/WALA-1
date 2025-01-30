@@ -2308,7 +2308,14 @@ public abstract class ToSource {
           } else if (loop != null && loop.getLoopExits().containsAll(cfg.getNormalSuccessors(bb))) {
             node = ast.makeNode(CAstNode.BLOCK_STMT, ast.makeNode(CAstNode.BREAK));
           } else {
-            node = ast.makeNode(CAstNode.BLOCK_STMT, ast.makeNode(CAstNode.GOTO));
+            if (inst.getTarget() == -1) {
+              node = CAstHelper.createExitParagraph();
+            } else if (cfg.getBlockForInstruction(inst.getTarget()).getLastInstructionIndex()
+                    == inst.getTarget()
+                && cfg.getBlockForInstruction(inst.getTarget()).getLastInstruction()
+                    instanceof SSAReturnInstruction) {
+              node = CAstHelper.createExitParagraph();
+            } else node = ast.makeNode(CAstNode.BLOCK_STMT, ast.makeNode(CAstNode.GOTO));
           }
           markPosition(node, inst.iIndex());
         }

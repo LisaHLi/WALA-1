@@ -163,8 +163,10 @@ public class CAstHelper {
     jumpList.addAll(bodyNode.getChildren());
 
     // generate jump to break first
-    // if this is the loop recorded in jumpToOutside, then generate if-break node
-    // check if it's middle loop, the ones that might be the outer most loop and not the inner most
+    // if this is the loop recorded in jumpToOutside, then generate if-break
+    // node
+    // check if it's middle loop, the ones that might be the outer most loop and
+    // not the inner most
     // loop
     CAstNode generateJumpToTailIfTest = null;
     boolean isOtherLoopJumpToTail =
@@ -174,7 +176,8 @@ public class CAstHelper {
       boolean isTopLoopJumpToTail =
           isTopLoopJumpToTail(jumpToOutside, returnToOutsideTail, currentLoop);
       if (isTopLoopJumpToTail) {
-        // if this is the parent loop contains the loops been jumped, insert jump assignment at the
+        // if this is the parent loop contains the loops been jumped, insert
+        // jump assignment at the
         // beginning of the loop
         // and generate if !loopjump then break
         // TODO: first or last?
@@ -196,7 +199,8 @@ public class CAstHelper {
     }
 
     // if this is the loop recorded in jumpToTop, then generate if-break node
-    // check if it's middle loop, the ones that's not the outer most loop and not the inner most
+    // check if it's middle loop, the ones that's not the outer most loop and
+    // not the inner most
     // loop
     boolean isMiddleLoopJumpToHeader =
         isMiddleLoopJumpToHeader(jumpToTop, returnToParentHeader, currentLoop);
@@ -223,7 +227,8 @@ public class CAstHelper {
     } else
     // find out the top loop
     if (isTopLoopJumpToHeader) {
-      // if this is the parent loop contains the loops been jumped, insert jump assignment at the
+      // if this is the parent loop contains the loops been jumped, insert jump
+      // assignment at the
       // beginning of the loop
       // and generate if !loopjump then break
       // TODO: first or last?
@@ -244,15 +249,16 @@ public class CAstHelper {
                 CAstOperator.OP_NE,
                 ast.makeNode(CAstNode.VAR, ast.makeConstant(varNameJump)),
                 ast.makeConstant(0));
-        // TODO: the combination of test is not working very well, disable it for now
-        //        if (generateJumpToTailIfTest != null) {
-        //          // TODO generate and with test in line 194
-        //          test =
-        //              ast.makeNode(
-        //                  CAstNode.BINARY_EXPR, CAstOperator.OP_REL_AND, test,
+        // TODO: the combination of test is not working very well, disable it
+        // for now
+        // if (generateJumpToTailIfTest != null) {
+        // // TODO generate and with test in line 194
+        // test =
+        // ast.makeNode(
+        // CAstNode.BINARY_EXPR, CAstOperator.OP_REL_AND, test,
         // not(generateJumpToTailIfTest));
-        //          needToGenerateJumpToTail = false;
-        //        }
+        // needToGenerateJumpToTail = false;
+        // }
       } else {
         CAstNode ifCondTest =
             ast.makeNode(
@@ -347,7 +353,8 @@ public class CAstHelper {
       }
     }
     if (appendToLast) {
-      // if loop can not found and the caller wants to append it anyways, then add it
+      // if loop can not found and the caller wants to append it anyways, then
+      // add it
       jumpList.add(ifCont);
       return true;
     }
@@ -444,7 +451,8 @@ public class CAstHelper {
     boolean isInnerMostLoopJumpToHeader =
         isInnerMostLoopJumpToHeader(jumpToTop, returnToParentHeader, branchBB, loop);
 
-    // If a loop breaker is found in jumpToOutside or returnToOutsideTail, set ct_loop_jump=true
+    // If a loop breaker is found in jumpToOutside or returnToOutsideTail, set
+    // ct_loop_jump=true
     // find out the inner most loop
     boolean isInnerMostLoopJumpToTail =
         isInnerMostLoopJumpToTail(jumpToOutside, returnToOutsideTail, branchBB, loop);
@@ -507,5 +515,15 @@ public class CAstHelper {
       if (assignNode != null) break;
     }
     return assignNode;
+  }
+
+  public static CAstNode createExitParagraph() {
+    // If goto instruction will go to -1 that should be an EXIT PARAGRAPGH
+    return ast.makeNode(
+        CAstNode.BLOCK_STMT, ast.makeNode(CAstNode.GOTO, ast.makeConstant("EXIT PARAGRAPH")));
+    // List<CAstNode> args = new ArrayList<>();
+    // args.add(ast.makeConstant("EXIT PARAGRAPH"));
+    // return ast.makeNode(CAstNode.PRIMITIVE, args.toArray(new
+    // CAstNode[args.size()]));
   }
 }
