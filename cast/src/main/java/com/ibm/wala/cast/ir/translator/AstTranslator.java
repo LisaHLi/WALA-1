@@ -1009,6 +1009,10 @@ public abstract class AstTranslator extends CAstVisitor<AstTranslator.WalkContex
 
     private PreBasicBlock currentBlock;
 
+    public PreBasicBlock getEntryBlock() {
+      return entryBlock;
+    }
+
     public int getCurrentInstruction() {
       return currentInstruction;
     }
