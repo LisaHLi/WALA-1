@@ -1719,7 +1719,8 @@ public abstract class ToSource {
       } else {
         // translate loop body after conditional
         RegionTreeNode lr = children.get(instruction).get(body);
-        condSuccessor = lr.toCAst(currentLoops);
+        if (lr == null) condSuccessor = ast.makeNode(CAstNode.EMPTY);
+        else condSuccessor = lr.toCAst(currentLoops);
       }
 
       if (after != null
